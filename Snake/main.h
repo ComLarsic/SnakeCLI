@@ -9,6 +9,16 @@ namespace Snake
 	{
 	public:
 		
+		std::string GetOS(){
+
+			#ifdef _WIN32
+			return "windows";
+			#elif __unix || __unix__
+			return "unix";
+			#endif
+		
+		}
+		
 		const int MapWidth = 40;
 		const int MapHeight = 20;
 		
@@ -37,13 +47,19 @@ namespace Snake
 		}
 		
 		void Draw()
-		{
-			system("clear"); //clears screen each frame
-			
+		{	
+			if(GetOS() == "unix")
+			{
+				system("clear"); //clears screen each frame
+			}
+			else if(GetOS() == "windows")
+			{
+				system("clr");
+			}
 			//draws map
 			for(int i = 0; i<MapWidth; i++) //draws top
 				{
-					cout<<"#";
+					printf("#");
 				}
 			cout<<endl;
 			
@@ -53,15 +69,15 @@ namespace Snake
 					{
 						if(j == 0) //Walls
 						{
-							cout<<"#";
+							printf("#");
 						}
 						if(i == y && j == x) //Player Head
 						{
-							cout<<"O";
+							printf("O");
 						}
 						else if(i == fruitPosY && j == fruitPosX) //Fruit
 						{
-							cout<<"F";
+							printf("F");
 						}
 						else
 						{	
@@ -71,20 +87,20 @@ namespace Snake
 								
 								if(tailX[k] == j && tailY[k] == i)
 								{
-									cout<<"o";
+									printf("o");
 									printed = true;
 								}
 								
 							}
 							if(!printed) //blankspaces
 							{
-								cout<<" ";
+								printf(" ");
 							}
 						}
 						
 						if(j == MapWidth - 1) //Walls
 						{
-							cout<<"#";
+							printf("#");
 						}
 					}
 					cout<<endl;
@@ -92,7 +108,7 @@ namespace Snake
 				
 			for(int i = 0; i<MapWidth; i++) //draws bottom
 				{
-					cout<<"#";
+					printf("#");
 				}
 			cout<<endl;
 			cout<<"Score: "<<score<<endl;
@@ -126,8 +142,7 @@ namespace Snake
 					case 's':
 						dir = DOWN;
 						break;
-					
-					//Exits game
+						//Exits game
 					case 'x':
 						death();
 						break;
@@ -181,7 +196,7 @@ namespace Snake
 			{
 				if(tailX[i] == x && tailY[i] == y)
 				{
-					gameOver = true;
+					death();
 				}
 			}
 			
